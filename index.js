@@ -45,3 +45,4 @@ client.on("messageDelete", async (message) => {
 
 client.on("messageUpdate", async (oldMsg, newMsg) => {
   if
+}
