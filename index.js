@@ -64,5 +64,35 @@ client.on("messageUpdate", (oldMsg, newMsg) => {
       `**After:**\n${newMsg.content || "*Empty*"}`
   }).catch(() => {});
 });
+const { AuditLogEvent } = require("discord.js");
+
+client.on("guildBanAdd", async (ban) => {
+  const guild = ban.guild;
+
+  let executor = "Unknown";
+  let reason = "No reason provided";
+
+  try {
+    const logs = await guild.fetchAuditLogs({
+      type: AuditLogEvent.MemberBanAdd,
+      limit: 1
+    });
+
+    const entry = logs.entries.first();
+    if (entry) {
+      executor = entry.executor?.tag || executor;
+      reason = entry.reason || reason;
+    }
+  } catch (err) {
+    console.error("Audit log fetch failed:", err);
+  }
+
+  const logChannel = guild.channels.cache.get(LOG_CHANNEL_ID);
+  if (!logChannel) return;
+
+  logChannel.send({
+    content:
+      `🔨 **Member Banned**\n` +
+      `User: ${ba
 
 client.login(process.env.TOKEN);
