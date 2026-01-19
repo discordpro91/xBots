@@ -47,5 +47,22 @@ client.on("messageDelete", (message) => {
       `Content: ${message.content || "*No content*"}`
   }).catch(() => {});
 });
+client.on("messageUpdate", (oldMsg, newMsg) => {
+  if (!newMsg.guild) return;
+  if (!oldMsg.author) return;
+  if (oldMsg.content === newMsg.content) return;
+
+  const logChannel = newMsg.guild.channels.cache.get(LOG_CHANNEL_ID);
+  if (!logChannel) return;
+
+  logChannel.send({
+    content:
+      `✏ **Message Edited**\n` +
+      `User: ${oldMsg.author.tag}\n` +
+      `Channel: ${oldMsg.channel}\n\n` +
+      `**Before:**\n${oldMsg.content || "*Empty*"}\n\n` +
+      `**After:**\n${newMsg.content || "*Empty*"}`
+  }).catch(() => {});
+});
 
 client.login(process.env.TOKEN);
