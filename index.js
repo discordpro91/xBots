@@ -32,5 +32,20 @@ client.once("ready", () => {
 /* 
   BOT ONLINE – ADD EVENTS BELOW
 */
+client.on("messageDelete", (message) => {
+  if (!message.guild) return;
+  if (!message.author) return;
+
+  const logChannel = message.guild.channels.cache.get(LOG_CHANNEL_ID);
+  if (!logChannel) return;
+
+  logChannel.send({
+    content:
+      `🗑 **Message Deleted**\n` +
+      `User: ${message.author.tag}\n` +
+      `Channel: ${message.channel}\n` +
+      `Content: ${message.content || "*No content*"}`
+  }).catch(() => {});
+});
 
 client.login(process.env.TOKEN);
