@@ -64,7 +64,6 @@ client.on("messageUpdate", (oldMsg, newMsg) => {
       `**After:**\n${newMsg.content || "*Empty*"}`
   }).catch(() => {});
 });
-const { AuditLogEvent } = require("discord.js");
 
 client.on("guildBanAdd", async (ban) => {
   const guild = ban.guild;
