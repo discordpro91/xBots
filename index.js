@@ -79,11 +79,11 @@ client.on("guildBanAdd", async (ban) => {
 
     const entry = logs.entries.first();
     if (entry) {
-      executor = entry.executor?.tag || executor;
-      reason = entry.reason || reason;
+      if (entry.executor) executor = entry.executor.tag;
+      if (entry.reason) reason = entry.reason;
     }
   } catch (err) {
-    console.error("Audit log fetch failed:", err);
+    console.error("Audit log error:", err);
   }
 
   const logChannel = guild.channels.cache.get(LOG_CHANNEL_ID);
@@ -91,7 +91,12 @@ client.on("guildBanAdd", async (ban) => {
 
   logChannel.send({
     content:
-      `🔨 **Member Banned**\n` +
-      `User: ${ba
+      "🔨 **Member Banned**\n" +
+      "User: " + ban.user.tag + "\n" +
+      "Moderator: " + executor + "\n" +
+      "Reason: " + reason
+  }).catch(() => {});
+});
+
 
 client.login(process.env.TOKEN);
